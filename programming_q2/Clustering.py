@@ -1,4 +1,6 @@
 import pandas as pd
+from pandas import DataFrame
+from UnionFind import UnionFind
 
 frame = pd.read_csv('clustering1.txt',skiprows=1,delim_whitespace=True,header=0,names=['edge_1','edge_2','cost'])
 
@@ -8,12 +10,16 @@ frame = pd.read_csv('clustering1.txt',skiprows=1,delim_whitespace=True,header=0,
 	## let p,q be closest pair of separated points
 	## merge the clusters containing p, q into a single cluster
 
+graph = UnionFind(500)
 
+frame = frame.sort(['cost'],ascending = True)
+frame.index = range(1,len(frame)+1)
 
-def FindClosestPair(graph):
+print frame.head(5)
 
-	return None
+for i in range(0,len(frame)):
+	if not graph.check_connected(frame['edge_1'][i+1], frame['edge_2'][i+1]):
+		graph.union(frame['edge_1'][i+1], frame['edge_2'][i+1])
+	print graph._rank[i]
 
-def Merge(cluster1,cluster2):
-
-	return None
+print graph
