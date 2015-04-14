@@ -38,3 +38,7 @@ class UnionFind:
     	else:
     		id[j] = i
     		rank[i] = rank[i] + 1
+
+    def num_clusters(self):
+
+    	return len(set(self._id))

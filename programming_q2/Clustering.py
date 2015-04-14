@@ -13,13 +13,24 @@ frame = pd.read_csv('clustering1.txt',skiprows=1,delim_whitespace=True,header=0,
 graph = UnionFind(500)
 
 frame = frame.sort(['cost'],ascending = True)
-frame.index = range(1,len(frame)+1)
-
-print frame.head(5)
+frame.index = range(0,len(frame))
 
 for i in range(0,len(frame)):
-	if not graph.check_connected(frame['edge_1'][i+1], frame['edge_2'][i+1]):
-		graph.union(frame['edge_1'][i+1], frame['edge_2'][i+1])
-	print graph._rank[i]
+	if graph.num_clusters() > 4:
+		if not graph.check_connected(frame['edge_1'][i]-1, frame['edge_2'][i]-1):
+			graph.union(frame['edge_1'][i]-1, frame['edge_2'][i]-1)
+	else:
+		pass
+ 
 
-print graph
+def GetMinSpacing(graph, frame):
+
+	lengths = []
+
+	for i in range(0,len(frame)):
+		if graph._id[frame['edge_1'][i]-1] != graph._id[frame['edge_2'][i]-1]:
+			lengths.append(frame['cost'][i])
+
+	return min(lengths)
+
+print GetMinSpacing(graph, frame)
