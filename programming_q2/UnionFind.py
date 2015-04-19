@@ -1,44 +1,31 @@
-class UnionFind:
+class UnionFind(object):
 
-    def __init__(self, n):
+	def __init__(self, N):
 
-        self._id = range(0,n)
-        self._count = n
-        self._rank = [1]*n
+		self._size = self.N = N
+		self._id = range(0,N)
+		self._components = N
 
-    def find(self,p):
+	def find(self,p):
 
-        id = self._id
-        while p != id[p]:
-            id[p] = id[id[p]]   # Path compression using halving.
-            p = id[p]
-        return p
+		return self._id[self._id[p]]
 
-    def count(self):
-    	return self._count
+	def union(self,p,q):
 
-    def check_connected(self,p,q):
-    	return self.find(p) == self.find(q)
+		if self._id[self._id[p]] == self._id[self._id[q]]:
+			return
+		else:
+			if self._id.count(self._id[p]) <= self._id.count(self._id[q]):
+				for i in range(0,self._size):
+					if self._id[i] == p:
+						self._id[i] = self._id[self._id[q]]
+			else:
+				for i in range(0,self._size):
+			 		if self._id[i] == q:
+			 			self._id[i] = self._id[self._id[p]]
+			self._components = self._components - 1
+			return
 
-    def union(self,p,q):
+	def components(self):
 
-    	id = self._id
-    	rank = self._rank
-
-    	i = self.find(p)
-    	j = self.find(q)
-
-    	if i == j:
-    		return
-
-    	if rank[i] < rank[j]:
-    		id[i] = j
-    	elif rank[j] > rank[i]:
-    		id[j] = i
-    	else:
-    		id[j] = i
-    		rank[i] = rank[i] + 1
-
-    def num_clusters(self):
-
-    	return len(set(self._id))
+		return self._components
